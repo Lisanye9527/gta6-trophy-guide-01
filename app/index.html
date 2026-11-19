@@ -3,23 +3,83 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GTA VI trophy checklist</title>
+<title>Leonida Legend — GTA VI Trophy Guide &amp; Tracker</title>
+<meta name="description" content="Offline guide and tracker for all 55 Grand Theft Auto VI PlayStation 5 trophies: cited guides, a platinum roadmap, missable flags, filters and a spoiler shield.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <h1>GTA VI trophy checklist</h1>
-  <p id="progress">0 of 55 earned</p>
+<header id="masthead">
+  <div class="masthead-inner">
+    <p class="kicker">Grand Theft Auto VI · PlayStation 5 · Offline guide</p>
+    <h1>Leonida Legend</h1>
+    <p class="tagline">Every one of the 55 trophies — a guide for each with its sources cited, a roadmap to the platinum, the missable ones flagged, and a tracker that saves your progress in this browser.</p>
+    <div id="progress-wrap">
+      <div id="progress-bar" role="progressbar" aria-label="Trophies earned"><div id="progress-fill"></div></div>
+      <p id="progress-text">Loading the trophy list…</p>
+      <p id="grade-counts"></p>
+    </div>
+  </div>
 </header>
-<div class="controls">
-  <label>Grade <select id="grade"><option value="all">All</option><option value="platinum">Platinum</option><option value="gold">Gold</option><option value="silver">Silver</option><option value="bronze">Bronze</option></select></label>
-  <button id="export" type="button">Export progress</button>
-  <label class="import">Import progress <input id="import" type="file" accept="application/json"></label>
-</div>
-<table>
-  <thead><tr><th>Earned</th><th>Trophy</th><th>Grade</th><th>How to get it</th></tr></thead>
-  <tbody id="rows"></tbody>
-</table>
+
+<nav id="view-tabs" aria-label="Views">
+  <button id="tab-checklist" class="tab active" type="button">Checklist &amp; guides</button>
+  <button id="tab-roadmap" class="tab" type="button">Roadmap to the platinum</button>
+</nav>
+
+<section id="toolbar" aria-label="Filters and progress tools">
+  <div class="tool-row">
+    <label class="tool grow">Search <input id="search" type="search" placeholder="Trophy name or keyword…"></label>
+    <label class="tool">Grade
+      <select id="grade-filter">
+        <option value="all">All grades</option>
+        <option value="platinum">Platinum</option>
+        <option value="gold">Gold</option>
+        <option value="silver">Silver</option>
+        <option value="bronze">Bronze</option>
+      </select>
+    </label>
+    <label class="tool check"><input id="hide-earned" type="checkbox"> Hide earned</label>
+    <label class="tool check"><input id="spoiler-shield" type="checkbox" checked> Spoiler shield: hide story trophies until earned</label>
+  </div>
+  <div class="tool-row" id="kind-filters" role="group" aria-label="Filter by kind">
+    <button type="button" class="chip active" data-kind="all">All 55</button>
+    <button type="button" class="chip" data-kind="story">Story</button>
+    <button type="button" class="chip" data-kind="missable">Missable</button>
+    <button type="button" class="chip" data-kind="collectibles">Collectibles</button>
+    <button type="button" class="chip" data-kind="activities">Activities</button>
+    <button type="button" class="chip" data-kind="online">Online</button>
+  </div>
+  <div class="tool-row">
+    <button id="export-progress" type="button">Export progress</button>
+    <label class="tool import-button">Import progress <input id="import-progress" type="file" accept="application/json"></label>
+    <button id="reset-progress" type="button">Reset</button>
+    <span id="visible-count" class="muted"></span>
+  </div>
+</section>
+
+<main>
+  <section id="checklist-view">
+    <p id="online-note" class="notice" hidden></p>
+    <p id="empty-state" class="notice" hidden>No trophies match those filters. Loosen a filter, or clear the search.</p>
+    <div id="trophy-list"></div>
+  </section>
+
+  <section id="roadmap-view" hidden>
+    <h2>Roadmap to the platinum</h2>
+    <p class="lede">One playthrough can earn the whole list — there is no mission replay and no New Game Plus, so the order below is built around manual saves and the few moments that can close behind you. Estimated time to platinum: roughly 200 hours, most of it the 100% checklist.</p>
+    <div id="roadmap-stages"></div>
+    <h3>The missable flags, in one place</h3>
+    <div id="missable-list"></div>
+  </section>
+</main>
+
+<footer>
+  <h2>Sources</h2>
+  <p>Official names, descriptions and grades are PlayStation's, as listed by the trophy databases below before launch and cross-checked on 19 November 2026. Every guide in this app is written for this app and says where its facts come from; a source is cited, never copied. Earn rates are Exophase's launch-day figures and will move fast.</p>
+  <ul id="source-list"></ul>
+  <p class="muted">An unofficial fan guide. It runs entirely from this folder: no network, no accounts, nothing uploaded. Progress lives in your browser's local storage — export it before you clear your browser data.</p>
+</footer>
+
 <script type="module" src="app.js"></script>
 </body>
 </html>

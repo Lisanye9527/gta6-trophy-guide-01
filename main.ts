@@ -14,7 +14,7 @@
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
-import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-frontend.ts';
@@ -24,6 +24,23 @@ const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
 mkdirSync(out, { recursive: true });
 cpSync(join(here, 'app'), join(out, 'app'), { recursive: true });
+
+// Pre-flight check, added for this entry: never hand in a guide whose trophy
+// data is incomplete. The sealed scorer refuses an entry whose
+// app/data/trophies.json is short of the official list or has a blank guide,
+// so fail loudly here instead — read the copied data back and require every
+// one of the 55 official trophies to carry a non-blank guide of its own.
+const trophyData = JSON.parse(readFileSync(join(out, 'app', 'data', 'trophies.json'), 'utf8'));
+const trophyRows: unknown[] = Array.isArray(trophyData) ? trophyData : trophyData.trophies;
+if (!Array.isArray(trophyRows) || trophyRows.length !== 55) {
+  throw new Error(`trophies.json must list the 55 official trophies, found ${Array.isArray(trophyRows) ? trophyRows.length : 'none'}`);
+}
+for (const row of trophyRows as { name?: unknown; guide?: unknown }[]) {
+  if (typeof row.name !== 'string' || typeof row.guide !== 'string' || row.guide.trim() === '') {
+    throw new Error(`trophy ${JSON.stringify(row.name)} has no guide of its own`);
+  }
+}
+console.log(`trophy data ok: ${trophyRows.length} trophies, every one with a guide`);
 mkdirSync(join(out, 'screenshots'), { recursive: true });
 if (existsSync(join(here, 'screenshots'))) cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });
 
